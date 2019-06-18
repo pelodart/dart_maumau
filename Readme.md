@@ -55,34 +55,28 @@ Die Entwicklung des Spielverlaufs kann aufgrund der vielen Ausnahmen (welcher Sp
 
 while (game.isActive) 
 {
+    game.nextTurn();
 	game.nextPlayer();
-	game.doZug();
-	game.print();
 }
 
 // Data:
 
-Zustand GAME_STARTED:
-Zustand GAME_RUNNING:
-
-int gameState= GAME_STARTED;
-int nextPlayer;
+int nextPlayer = 1;
 int siebenCounter = 2;
+int nächsteFarbe;    // TODO: Festlegenm, wann die gesetzt wird
 
 Methoden:
 
 -- nextPlayer
--- doZug
+-- nextTurn
 
 
--- nextPlayer:
-if (gameState == GAME_STARTED) {
+-- nextTurn:
 
-    if (KarteOnDeck = 8) {
-        nextPlayer = 2;
-    }
-    else if (KarteOnDeck = 7) {
-        if (Spieler 1 hat 7) {
+// pre-condition: nextPlayer zeigt auf aktuellen Spieler
+
+if (KarteOnDeck = 7) {
+        if (Spieler hat 7) {
             = Spieler legt 7 ab;
             = siebenCounter += 2;
         }
@@ -90,44 +84,47 @@ if (gameState == GAME_STARTED) {
             = Spieler zieht siebenCounter Karten;
             = siebenCounter = 2;
         }
-        nextPlayer = 2;
-    } else {
-        nextPlayer = 1;
-    }
-
-    gameState = GAME_RUNNING;
-}
-else {
-
-    if (KarteOnDeck = 8) {
-        nextPlayer = suche nächsten aktiven Spieler;
-    }
-    else if (KarteOnDeck = 7) {
-        Spieler 1 nimmt 2 Karten;
-        nextPlayer = 2;
-    } else {
-    nextPlayer = 1;
-    }
-
-}
-
-
-
-doZug:
-if (KarteOnDeck = 7) {
-    if (habeEineSieben ()) {
-      = Lege eine Sieben ab;
-    }
 } else (habeFarbeOderFigur) {
+    = --> Variable choosenColor kann aktiv sein
     = Lege eine Karte mit Farbe oder Figur ab;
+    = --> Variable choosenColor clearen
 } else {
     // Habe weder Farbe noch Figur
-    = Ziehe Karte;
-    = if (Gezogene Karte passt zu Farbe oder Figur) {
-        = Gezogene Karte ablegen;
+    if (habeEinenBuben) {
+        = Lege Bube ab
+        = Bestimme nächste Farbe (Color) --> Variable choosenColor gesetzt
+    }
+    else {
+        = Ziehe Karte;
+        = if (habeFarbeOderFigur) {
+            --> Variable choosenColor kann aktiv sein
+            = Gezogene Karte ablegen;
+            = --> Variable choosenColor clearen
+        }
     }
 }
 
 
-// NUR ZUM TESTEN
+-- nextPlayer:
 
+nextPlayer = suche nächsten aktiven Spieler;
+
+if (KarteOnDeck = 8) {
+    nextPlayer = suche nächsten aktiven Spieler;
+}
+
+
+// ==============
+
+Folgende Methoden werden bei diesem Design gebraucht:
+
+Card CardDeck::TopOfDeck
+bool Player::hasSeven // Jepp
+Card Player::playSeven // Jepp
+void Player::drawCards(int number);   // Jepp
+bool Player::hasColorOrPicture(CardColor color, CardPicture picture);   // Jepp
+bool Player::hasBube   // Jepp
+void Player::playBube  // Jepp
+void Player::chooseColor    // Jepp
+Card Player::drawCard   (die Karte vom Rückgabewert sollte mit den nächsten Methode gleich abgelegt werden)  // habe ich schon
+void Player::playCard (Card card);
