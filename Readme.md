@@ -129,3 +129,5 @@ if (KarteOnDeck = 7) {
 }
 
 
+// NUR ZUM TESTEN
+
