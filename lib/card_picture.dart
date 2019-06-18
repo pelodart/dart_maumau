@@ -1,0 +1,1 @@
+	enum CardPicture { Empty, Sieben, Acht, Neun, Zehn, Bube, Dame, Koenig, Ass }
