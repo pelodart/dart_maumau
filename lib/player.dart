@@ -23,6 +23,7 @@ class Player {
   String get Name => _name;
   int get NumberCards => _hand.Size;
   bool get IsPlaying => _isPlaying;
+  set IsPlaying(bool value) => _isPlaying = value;
 
   set PlayingDeck(CardDeck value) => _playing = value;
   set DrawingDeck(CardDeck value) => _drawing = value;
@@ -52,6 +53,7 @@ class Player {
       if (card.Picture == CardPicture.Sieben) {
         _hand.remove(i);
         _playing.push(card);
+        _testMauMau();
         return true;
       }
     }
@@ -65,6 +67,7 @@ class Player {
       if (card.Picture == CardPicture.Bube) {
         _hand.remove(i);
         _playing.push(card);
+        _testMauMau();
         return true;
       }
     }
@@ -88,9 +91,9 @@ class Player {
       if (card.Color == color || card.Picture == color) {
         _hand.remove(i);
         _playing.push(card);
+        _testMauMau();
         // String s = (">   {_name} plays {card}");
         // MauMaster.Log(s);
-        // this.PrintMauMauIf();
         return true;
       }
     }
@@ -112,6 +115,18 @@ class Player {
   }
 
   // private helper methods
+  void _testMauMau() {
+    if (_hand.Size == 1) {
+      String s = "==> {_name} says 'Mau'";
+      // MauMaster.Log(s);
+
+    } else if (_hand.Size == 0) {
+      String msg = ">   {_name} says 'Mau-Mau', leaving game !";
+      // Log(msg);
+      _isPlaying = false;
+    }
+  }
+
   Card drawCard() {
     // turn over playing deck to serve as new drawing deck
     if (_drawing.Size == 0) {
@@ -134,5 +149,9 @@ class Player {
     }
 
     return _drawing.pop();
+  }
+
+  void clearHand() {
+    _hand.clear();
   }
 }
