@@ -75,6 +75,7 @@ Methoden:
 
 // pre-condition: nextPlayer zeigt auf aktuellen Spieler
 
+```
 if (KarteOnDeck = 7) {
         if (Spieler hat 7) {
             = Spieler legt 7 ab;
@@ -103,16 +104,17 @@ if (KarteOnDeck = 7) {
         }
     }
 }
+```
 
 
 -- nextPlayer:
 
+```
 nextPlayer = suche nächsten aktiven Spieler;
-
 if (KarteOnDeck = 8) {
     nextPlayer = suche nächsten aktiven Spieler;
 }
-
+```
 
 // ==============
 

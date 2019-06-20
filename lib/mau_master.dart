@@ -14,17 +14,25 @@ class MauMaster {
   CardDeck _playing; // deck to play (Kartenstapel zum Ablegen - offen)
   CardDeck _drawing; // deck to draw (Kartenstapel zum Ziehen - verdeckt)
   List<Player> _players; // array of players
-  int _currentPlayer = 0;
-  int _sevenCounter = 2;
-  CardColor _choosenColor = CardColor.Empty;
+
+  // controlling variables of a single game
+  int _currentPlayer; // index of current player
+  bool _isSevenActive; // must seven be considered or not
+  int _sevenCounter; // number of cards to draw, if seven is played
+  CardColor _choosenColor; // choosen color, if 'Bube' is played
+  int _activePlayers; // number of active players
   int _rounds; // counting rounds of a game
-  int _activePlayers;
+
   Random _random;
 
+  // needed to control output
   bool _isDebug;
   bool _isVerbose;
 
   MauMaster(List<String> names) {
+    // TODO: create new random generator (prefer unique results to make testing more easier)
+    _random = Random();
+
     // create two card decks
     _playing = CardDeck(_random); // deck to play (Kartenstapel zum Ablegen)
     _drawing = CardDeck(_random); // deck to draw (Kartenstapel zum Ziehen)
@@ -37,13 +45,10 @@ class MauMaster {
       _players[i].DrawingDeck = _drawing;
     }
 
-    // TODO: create new random generator (prefer unique results to make testing more easier)
-    _random = Random();
-
     // read environment variables from launch.json
     Map<String, String> env = Platform.environment;
     String value = env["DEBUG"];
-    _isDebug = (value == 'true') ? true : (value == 'false') ? false : false;
+    _isDebug = (value == 'true') ? true : false;
 
     // set (or clear) 'verbose' flag
     _isVerbose = true;
@@ -64,18 +69,25 @@ class MauMaster {
     }
 
     _currentPlayer = 0;
+    _isSevenActive = true;
+    _sevenCounter = 2;
+    _choosenColor = CardColor.Empty;
     _activePlayers = _players.length;
     _rounds = 0;
   }
 
   // public interface
   void printVersion() {
-    print("------------------------------------------------------------------");
+    print("-------------------------------------------------------------");
     print(MauMaster.Version);
-    print("------------------------------------------------------------------");
+    print("-------------------------------------------------------------");
   }
 
   void playGame() {
+    // uncover first card
+    Card firstCard = _drawing.pop();
+    _playing.push(firstCard);
+
     while (_activePlayers > 1) {
       // trace game
       Card topMostCard = _playing.TopOfDeck;
@@ -84,6 +96,7 @@ class MauMaster {
       // play next turn
       _rounds++;
       _nextTurn();
+      _updateNumberOfActivePlayers();
       _nextPlayer();
     }
 
@@ -95,35 +108,36 @@ class MauMaster {
     Card top = _playing.TopOfDeck;
     Player player = _players[_currentPlayer];
 
-    if (top.Picture == CardPicture.Sieben) {
+    if (top.Picture == CardPicture.Sieben && _isSevenActive) {
       if (player.hasSeven()) {
         player.playSeven();
         _sevenCounter += 2;
       } else {
         player.drawCards(_sevenCounter);
         _sevenCounter = 2;
+        _isSevenActive = false;
       }
     } else {
+      _isSevenActive = true;
       CardColor currentColor = _playing.TopOfDeck.Color;
       if (_choosenColor != CardColor.Empty) currentColor = _choosenColor;
       CardPicture currentPicture = _playing.TopOfDeck.Picture;
 
       if (player.playColorOrPicture(currentColor, currentPicture)) {
-        // player could play a card
+        // player has played a card
         _choosenColor = CardColor.Empty;
-        // Log-Ausgabe;
       } else if (player.hasBube()) {
-        // player couldn't play a card, but has a Bube card, we play it immediately
+        // player cannot play a card, but has a 'Bube', we play it immediately
         player.playBube();
         _choosenColor = player.chooseAColor();
       } else {
-        // player has either requested color nor requested picture: draw a card
+        // player has neither requested color nor requested picture: draw a card
         Card card = player.drawCard();
 
         // check, whether drawn card can be played immediately
         if (card.Picture == CardPicture.Bube) {
           // player has drawn a Bube card, we play it immediately
-          player.playBube();
+          player.playCard(card);
           _choosenColor = player.chooseAColor();
         } else if (card.Color == _playing.TopOfDeck.Color ||
             card.Picture == _playing.TopOfDeck.Picture) {
@@ -135,16 +149,25 @@ class MauMaster {
     }
   }
 
-  void _nextPlayer() {
-    // update number of active players
+  void _updateNumberOfActivePlayers() {
     _activePlayers = 0;
     for (int i = 0; i < _players.length; i++) {
       if (_players[i].IsPlaying) {
         _activePlayers++;
       }
     }
+  }
 
-    // move to next player
+  void _nextPlayer() {
+    _nextPlayerInternal();
+    Card top = _playing.TopOfDeck;
+    if (top.Picture == CardPicture.Acht) {
+      _nextPlayerInternal();
+    }
+  }
+
+  void _nextPlayerInternal() {
+    // move index to next valid index (take care of array bounds)
     _currentPlayer++;
     if (_currentPlayer == _players.length) _currentPlayer = 0;
 
@@ -154,6 +177,26 @@ class MauMaster {
       if (_currentPlayer == _players.length) _currentPlayer = 0;
     }
   }
+
+  // void _nextPlayer() {
+  //   // update number of active players
+  //   _activePlayers = 0;
+  //   for (int i = 0; i < _players.length; i++) {
+  //     if (_players[i].IsPlaying) {
+  //       _activePlayers++;
+  //     }
+  //   }
+
+  //   // move to next player
+  //   _currentPlayer++;
+  //   if (_currentPlayer == _players.length) _currentPlayer = 0;
+
+  //   // search next array slot with still active player
+  //   while (!_players[_currentPlayer].IsPlaying) {
+  //     _currentPlayer++;
+  //     if (_currentPlayer == _players.length) _currentPlayer = 0;
+  //   }
+  // }
 
   // logging utilities
   static void log(String message) {
@@ -167,19 +210,16 @@ class MauMaster {
 
   void _logGameStatusDebug(Card topMostCard, int currentPlayer) {
     if (_isVerbose) {
-      print(
-          "------------------------------------------------------------------");
+      print("-------------------------------------------------------------");
       print("Topmost card: ${topMostCard}");
-      print(
-          "------------------------------------------------------------------");
+      print("-------------------------------------------------------------");
 
       for (int i = 0; i < _players.length; i++) {
         String prefix = (i == currentPlayer) ? "-->" : "   ";
-        print("${prefix} ${_players[i]}");
+        print("${prefix} ${_players[i].toString()}");
       }
 
-      print(
-          "------------------------------------------------------------------");
+      print("-------------------------------------------------------------");
     }
 
 // #if SINGLE_STEP

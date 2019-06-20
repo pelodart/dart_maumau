@@ -3,6 +3,7 @@ import 'card_color.dart';
 import 'card.dart';
 import 'card_deck.dart';
 import 'card_set.dart';
+import 'mau_master.dart';
 
 class Player {
   CardSet _hand; // player's hand of cards (usually 5)
@@ -52,8 +53,7 @@ class Player {
       Card card = _hand[i];
       if (card.Picture == CardPicture.Sieben) {
         _hand.remove(i);
-        _playing.push(card);
-        _testMauMau();
+        playCard(card);
         return true;
       }
     }
@@ -66,8 +66,7 @@ class Player {
       Card card = _hand[i];
       if (card.Picture == CardPicture.Bube) {
         _hand.remove(i);
-        _playing.push(card);
-        _testMauMau();
+        playCard(card);
         return true;
       }
     }
@@ -79,21 +78,19 @@ class Player {
     for (int i = 0; i < number; i++) {
       Card card = this.drawCard();
       _hand.add(card);
-
-      // String msg = (">   {_name} draws {card} from drawing deck!");
-      // MauMaster.Log(msg);
     }
   }
 
   bool playColorOrPicture(CardColor color, CardPicture picture) {
     for (int i = 0; i < _hand.Size; i++) {
       Card card = _hand[i];
-      if (card.Color == color || card.Picture == color) {
+
+      // picture 'Bube' isn't a *regular* picture
+      if (card.Picture == CardPicture.Bube) continue;
+
+      if (card.Color == color || card.Picture == picture) {
         _hand.remove(i);
-        _playing.push(card);
-        _testMauMau();
-        // String s = (">   {_name} plays {card}");
-        // MauMaster.Log(s);
+        playCard(card);
         return true;
       }
     }
@@ -103,26 +100,31 @@ class Player {
   CardColor chooseAColor() {
     if (_hand.Size > 0) {
       // players has (still) some cards in his hand - very simple algorithm
+      MauMaster.log(
+          '>   ${_name} has choosen color ${_hand[0].Color.toString().split('.')[1]}');
       return _hand[0].Color;
     } else {
       // players has no more cards, choose arbitrary card color
+      MauMaster.log(
+          '>   ${_name} has choosen color ${CardColor.Herz.toString().split('.')[1]}');
       return CardColor.Herz;
     }
   }
 
   void playCard(Card card) {
+    MauMaster.log('>   ${_name} plays ${card}');
     _playing.push(card);
+    _testMauMau();
   }
 
   // private helper methods
   void _testMauMau() {
     if (_hand.Size == 1) {
-      String s = "==> {_name} says 'Mau'";
-      // MauMaster.Log(s);
-
+      String s = "==> ${_name} says 'Mau'";
+      MauMaster.log(s);
     } else if (_hand.Size == 0) {
-      String msg = ">   {_name} says 'Mau-Mau', leaving game !";
-      // Log(msg);
+      String msg = ">   ${_name} says 'Mau-Mau', leaving game !";
+      MauMaster.log(msg);
       _isPlaying = false;
     }
   }
@@ -130,7 +132,7 @@ class Player {
   Card drawCard() {
     // turn over playing deck to serve as new drawing deck
     if (_drawing.Size == 0) {
-      // MauMaster.Log(">   turn over playing deck to serve as new drawing deck");
+      MauMaster.log('>   turn over playing deck to serve as new drawing deck');
 
       // save topmost card of playing stack
       Card topmostPlayingCard = _playing.pop();
@@ -148,10 +150,23 @@ class Player {
       this._playing.push(topmostPlayingCard);
     }
 
-    return _drawing.pop();
+    Card card = _drawing.pop();
+    String msg = ('>   ${_name} draws ${card} from drawing deck!');
+    MauMaster.log(msg);
+    return card;
   }
 
   void clearHand() {
     _hand.clear();
+  }
+
+  @override
+  String toString() {
+    String s = "${_name} [${_isPlaying ? 'X' : '-'}]";
+    if (_hand.Size > 0) {
+      s += ': ';
+      s += _hand.toString();
+    }
+    return s;
   }
 }
