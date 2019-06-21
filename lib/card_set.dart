@@ -1,15 +1,14 @@
 import 'card.dart';
 
 class CardSet {
-  List<Card> _set;
+  final List<Card> _set;
 
   // c'tor(s)
-  CardSet() {
-    _set = List<Card>();
-  }
+  CardSet() : _set = List<Card>() {}
 
   // getter/setter
   int get Size => _set.length;
+  bool get IsEmpty => _set.length == 0;
 
   // operators
   operator [](int i) => _set[i];

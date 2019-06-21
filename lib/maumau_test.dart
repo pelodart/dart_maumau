@@ -1,5 +1,5 @@
+import "dart:io";
 import 'dart:math';
-
 
 import 'card.dart';
 import 'card_color.dart';
@@ -84,18 +84,47 @@ class MauMauTest {
     master.playGame();
   }
 
-  // static void testUnit_10_EnvironmentVariables() {
-  //   Map<String, String> env = Platform.environment;
-  //   String value = env["DEBUG"];
-  //   bool flag = (value == 'true') ? true : (value == 'false') ? false : false;
-  //   print(flag);
+  static void testUnit_12_StressTestMauMaster() {
+    MauMaster mm = new MauMaster(["Hans", "Sepp", "Ulli"]);
+    mm.printVersion();
 
-  //   String result = String.fromEnvironment('DEBUG');
-  //   print('result: >>>${result}<<<');
+    int minRounds = 9223372036854775807;
+    int minRoundsIndex = -1;
+    int maxRounds = -1;
+    int maxRoundsIndex = -1;
 
-  //   if (const String.fromEnvironment('DEBUG') != null) {
-  //     print('debug: Ahhhhh');
-  //   }
-  //   print('debug: Boooo');
-  // }
+    for (int i = 1; i < 1000; i++) {
+      mm.reset();
+      mm.playGame();
+
+      if (mm.Rounds < minRounds) {
+        minRounds = mm.Rounds;
+        minRoundsIndex = i;
+      }
+
+      if (mm.Rounds > maxRounds) {
+        maxRounds = mm.Rounds;
+        maxRoundsIndex = i;
+      }
+
+      print("Game at ${i}: ${mm.Rounds}");
+    }
+
+    print("Minumum number of rounds: ${minRounds} [Index ${minRoundsIndex}]");
+    print("Maximum number of rounds: ${maxRounds} [Index ${maxRoundsIndex}]");
+  }
+
+  static void testUnit_11_EnvironmentVariables() {
+    Map<String, String> env = Platform.environment;
+    String value = env["DEBUG"];
+    bool flag = (value == 'true') ? true : false;
+    print(flag);
+
+    String result = String.fromEnvironment('DEBUG');
+    print('result: >>>${result}<<<');
+
+    if (const String.fromEnvironment('DEBUG') != null) {
+      print('debug: found!');
+    }
+  }
 }

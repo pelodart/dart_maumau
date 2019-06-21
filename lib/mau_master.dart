@@ -30,29 +30,30 @@ class MauMaster {
   bool _isVerbose;
 
   MauMaster(List<String> names) {
-    // TODO: create new random generator (prefer unique results to make testing more easier)
-    _random = Random();
-
-    // create two card decks
-    _playing = CardDeck(_random); // deck to play (Kartenstapel zum Ablegen)
-    _drawing = CardDeck(_random); // deck to draw (Kartenstapel zum Ziehen)
-
-    // create array of players
-    _players = List<Player>(names.length);
-    for (int i = 0; i < names.length; i++) {
-      _players[i] = Player(name: names[i]);
-      _players[i].PlayingDeck = _playing;
-      _players[i].DrawingDeck = _drawing;
-    }
-
-    // read environment variables from launch.json
+    // read environment variables from 'launch.json'
     Map<String, String> env = Platform.environment;
     String value = env["DEBUG"];
     _isDebug = (value == 'true') ? true : false;
 
+    // TODO: create new random generator (prefer unique results to make testing more easier)
+    _random = Random();
+
+    // create two card decks (singletons)
+    _playing = CardDeck(_random); // deck to play
+    _drawing = CardDeck(_random); // deck to draw
+
+    // create array of players
+    _players = List<Player>(names.length);
+    for (int i = 0; i < names.length; i++) {
+      _players[i] = Player(names[i], _playing, _drawing);
+    }
+
     // set (or clear) 'verbose' flag
     _isVerbose = true;
   }
+
+  // getter/setter
+  int get Rounds => _rounds;
 
   // public interface
   void reset() {
@@ -109,8 +110,8 @@ class MauMaster {
     Player player = _players[_currentPlayer];
 
     if (top.Picture == CardPicture.Sieben && _isSevenActive) {
-      if (player.hasSeven()) {
-        player.playSeven();
+      if (player.hasPicture(CardPicture.Sieben)) {
+        player.playPicture(CardPicture.Sieben);
         _sevenCounter += 2;
       } else {
         player.drawCards(_sevenCounter);
@@ -126,9 +127,9 @@ class MauMaster {
       if (player.playColorOrPicture(currentColor, currentPicture)) {
         // player has played a card
         _choosenColor = CardColor.Empty;
-      } else if (player.hasBube()) {
+      } else if (player.hasPicture(CardPicture.Bube)) {
         // player cannot play a card, but has a 'Bube', we play it immediately
-        player.playBube();
+        player.playPicture(CardPicture.Bube);
         _choosenColor = player.chooseAColor();
       } else {
         // player has neither requested color nor requested picture: draw a card
@@ -136,12 +137,12 @@ class MauMaster {
 
         // check, whether drawn card can be played immediately
         if (card.Picture == CardPicture.Bube) {
-          // player has drawn a Bube card, we play it immediately
+          // player has drawn a Bube card, we play this card immediately
           player.playCard(card);
           _choosenColor = player.chooseAColor();
         } else if (card.Color == _playing.TopOfDeck.Color ||
             card.Picture == _playing.TopOfDeck.Picture) {
-          // player can play drawn card
+          // player can play drawn card immediately
           player.playCard(card);
           _choosenColor = CardColor.Empty;
         }
@@ -162,6 +163,7 @@ class MauMaster {
     _nextPlayerInternal();
     Card top = _playing.TopOfDeck;
     if (top.Picture == CardPicture.Acht) {
+      log("'8' is on top of deck - skip next player");
       _nextPlayerInternal();
     }
   }
@@ -177,26 +179,6 @@ class MauMaster {
       if (_currentPlayer == _players.length) _currentPlayer = 0;
     }
   }
-
-  // void _nextPlayer() {
-  //   // update number of active players
-  //   _activePlayers = 0;
-  //   for (int i = 0; i < _players.length; i++) {
-  //     if (_players[i].IsPlaying) {
-  //       _activePlayers++;
-  //     }
-  //   }
-
-  //   // move to next player
-  //   _currentPlayer++;
-  //   if (_currentPlayer == _players.length) _currentPlayer = 0;
-
-  //   // search next array slot with still active player
-  //   while (!_players[_currentPlayer].IsPlaying) {
-  //     _currentPlayer++;
-  //     if (_currentPlayer == _players.length) _currentPlayer = 0;
-  //   }
-  // }
 
   // logging utilities
   static void log(String message) {

@@ -2,17 +2,13 @@ import 'card_color.dart';
 import 'card_picture.dart';
 
 class Card {
-  CardColor _color;
-  CardPicture _picture;
+  final CardColor _color;
+  final CardPicture _picture;
 
   // c'tor
-  // Card.zero();  // TODO !?!?!?!
-  Card(this._color, this._picture);
-
-//   Card() {
-//     _color = CardColor.Empty;
-//     _picture = CardPicture.Empty;
-//   }
+  Card(CardColor color, CardPicture picture)
+      : _color = color,
+        _picture = picture {}
 
   // getter/setter
   CardColor get Color => _color;

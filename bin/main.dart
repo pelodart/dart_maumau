@@ -21,8 +21,9 @@ void main() {
   // MauMauTest.testUnit_03_CardDeck();
   // MauMauTest.testUnit_04_CardSet();
 
-  MauMauTest.testUnit_05_PlayTheGame();
+  // MauMauTest.testUnit_05_PlayTheGame();
 
   // MauMauTest.testUnit_10_EnvironmentVariables();
-}
 
+  MauMauTest.testUnit_12_StressTestMauMaster();
+}

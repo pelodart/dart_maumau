@@ -6,13 +6,12 @@ import 'card_picture.dart';
 import 'card.dart';
 
 class CardDeck {
-  List<Card> _deck;
+  final List<Card> _deck;
   Random _rand;
 
   // c'tor(s)
-  CardDeck(Random rand) {
+  CardDeck(Random rand) : _deck = List<Card>() {
     _rand = rand;
-    _deck = List<Card>();
   }
 
   // getter/setter
