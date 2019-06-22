@@ -1,6 +1,12 @@
 // TODO: ZWei neue Methode DURCHZIEHEN
 
-// TODO: Viele der List<> operationen können mit sehr knappen Methoden ausgeführt werden !!!
+// TODO: Viele der 
+
+
+// Vererbung: Die beiden Stapen können durch Vererbung besser modelliert werden.
+// Zwei neue Klassen: PlayingDeck und DrawingDeck
+
+// TODO : List<> operationen können mit sehr knappen Methoden ausgeführt werden !!!
 
 // hasSeven und hasBube lassen sich zusammenfassen !!!
 

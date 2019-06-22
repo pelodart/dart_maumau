@@ -1,12 +1,12 @@
 # Das Kartenspiel Mau Mau
 
-Wir betrachten in dieser Aufgabe den bekannten Kartenspiel-Klassiker Mau Mau. Für das Spiel sind eine Reihe von Dart-Klassen zu entwickeln, die wir in den ersten Abschnitten zunächst unabhängig voneinander betrachten. Erst am Schluss der Aufgabe fügen wir diese Klassen zu einem Ganzen zusammen. Die Grundregeln des Spiels sind folgende:
+Wir betrachten in dieser Aufgabe den bekannten Kartenspiele-Klassiker Mau Mau. Für das Spiel sind eine Reihe von Dart-Klassen zu entwickeln, die wir in den ersten Abschnitten zunächst unabhängig voneinander betrachten. Erst am Schluss der Aufgabe fügen wir diese Klassen zu einem Ganzen zusammen. Die Grundregeln des Spiels sind folgende:
 
 *Spielvorbereitung*:
 
 - An einem Kartentisch sitzen mehrere Kartenspieler zusammen. Auf dem Tisch liegt ein Stapel mit verdeckten Spielkarten. 
 
-- Jeder Spieler erhält vor Spielbeginn fünf Karten. Dann wird eine Karte vom Stapel genommen und aufgedeckt. Während des Spiels gibt es also zwei Kartenstapel: Einen Stapel zum Ziehen von (verdeckten) Karten (Ziehstapel), einen zweiten Stapel zum Ablegen von (aufgedeckten) Karten (Ablagestapel). 
+- Jeder Spieler erhält vor Spielbeginn fünf Karten. Dann wird eine Karte vom Stapel genommen und aufgedeckt. Während des Spiels gibt es also zwei Kartenstapel: Einen Stapel zum Ziehen von (verdeckten) Karten (Ziehstapel, engl. "drawing deck"), einen zweiten Stapel zum Ablegen von (aufgedeckten) Karten (Ablagestapel, engl. "playing deck"). 
 
 *Spielverlauf*:
 
@@ -49,7 +49,7 @@ enum CardPicture { Empty, Sieben, Acht, Neun, Zehn, Bube, Dame, Koenig, Ass }
 Mit ihrer Hilfe können Sie nun die Klasse ``Card`` realisieren, entnehmen Sie weitere Hilfestellungen dazu Tabelle 1:
 
 | Element | Schnittstelle und Beschreibung |
-|:-------------- |-----------------------------------------|
+|:-|:-|
 | Konstruktor | ``Card(CardColor color, CardPicture picture);``<br/> Der Konstruktor dient zum Erzeugen eines Kartenobjekts. Die beiden Parameter ``color`` und ``picture`` legen die Details der Karte fest.|
 | *getter* ``Color`` | ``CardColor get Color`` <br/> Liefert die Farbe einer Spielkarte zurück.|
 | *getter* ``Picture`` | ``CardPicture get Picture`` <br/> Liefert das Bild einer Spielkarte zurück.|
@@ -57,13 +57,12 @@ Mit ihrer Hilfe können Sie nun die Klasse ``Card`` realisieren, entnehmen Sie w
 
 Tabelle 1. Zentrale Elemente der Klasse ``Card``.
 
-Der ``==``-Operator ist Bestandteil der Dart-Objektmodells, er ist in der ultimativen Basisklasse ``Object`` definiert und in den abgeleiteten Klassen geignet zu überschreiben. Dies gilt ebenfalls für die ``toString``-Methode: Überschreiben Sie diese Methode, um ein ``Card``-Objekt auf der Konsole ausgeben zu können.
+Der ``==``-Operator ist Bestandteil des Dart-Objektmodells, er ist in der ultimativen Basisklasse ``Object`` definiert und in den abgeleiteten Klassen geeignet zu überschreiben. Dies gilt ebenfalls für die ``toString``-Methode: Überschreiben Sie diese Methode, um ein ``Card``-Objekt auf der Konsole ausgeben zu können.
 
 *Testrahmen für Klasse* ``Card``:
 
 ```dart
 static void testCards() {
-  // test frame for Card objects
   Card card1 = Card(CardColor.Kreuz, CardPicture.Neun);
   Card card2 = Card(CardColor.Pik, CardPicture.Koenig);
   Card card3 = Card(CardColor.Kreuz, CardPicture.Neun);
@@ -100,11 +99,11 @@ Auf dem Spieltisch liegen während eines Mau-Mau-Spiels zwei Kartenstapel: Einer
 Neben den üblichen Methoden ``push``, ``pop`` und ``isEmpty`` gibt es auch die *getter*-Methode ``TopOfStack``. Sie ist vor allem für den Stapel mit den abgelegten Karten relevant, da die Spieler stets sehen müssen, welche Karte als letztes abgelegt wurde und folglich als oberste Karte aufliegt. Für den Stapel zum Ziehen von Karten wäre ein Aufruf der ``TopOfStack``-Methode natürlich tabu.
 
 | Element | Schnittstelle und Beschreibung |
-|:-------------- |-----------------------------------------|
+|:-|:-|
 | Konstruktor | ``CardDeck();``<br/> Legt ein leeres Kartenstapelobjekt an.|
 | *getter* ``Size`` | ``int get Size`` <br/> Liefert die Anzahl der Karten des Stapels zurück.|
 | *getter* ``IsEmpty`` | ``bool get IsEmpty`` <br/> Mit ``IsEmpty`` lässt sich feststellen, ob der Kartenstapel noch Karten enthält oder leer ist   .|
-| *getter* ``TopOfDeck`` | ``Card get TopOfDeck`` <br/> Dient zum Betrachten der obersten Karte des Kartenstapels. Die Karte wird **nicht** vom Stapel entfernt!.|
+| *getter* ``TopOfDeck`` | ``Card get TopOfDeck`` <br/> Dient zum Betrachten der obersten Karte des Kartenstapels. Die Karte wird **nicht** vom Stapel entfernt!|
 | Methode ``push``| ``void push(Card card);`` <br/> Dient zum Ablegen einer Karte ``card`` auf dem Kartenstapel. |
 | Methode ``pop``| ``Card pop();`` <br/> Dient zum Abheben einer Karte vom Kartenstapel. |
 | Methode ``fill``| ``void fill();`` <br/> Dient zum Vorbelegen des Stapels mit allen verfügbaren Karten. |
@@ -114,6 +113,8 @@ Neben den üblichen Methoden ``push``, ``pop`` und ``isEmpty`` gibt es auch die 
 Tabelle 2. Zentrale Elemente der Klasse ``CardDeck``.
 
 Die ``toString``-Methode ist ebenfalls passend zu überschreiben, um ein ``CardDeck``-Objekt auf der Konsole ausgeben zu können.
+
+*Frage*: Wie können man die Unterschiede zwischen einem Ablage- und einem Ziehstapel mit einem zentralen Feature der objektorientierten Programmierung exakt modellieren?
 
 *Testrahmen für Klasse* ``CardDeck``:
 
@@ -146,7 +147,7 @@ Beim Spielen von Mau-Mau hält jeder Spieler eine bestimmte Menge von Spielkarte
 Eine Beschreibung der wichtigsten Methoden und Eigenschaften der Klasse ``CardSet`` finden Sie in Tabelle 3 vor:
 
 | Element | Schnittstelle und Beschreibung |
-|:-------------- |-----------------------------------------|
+|:-|:-|
 | Konstruktor | ``CardSet();``<br/> Legt ein leeres ``CardSet``-Objekt an.|
 | *getter* ``Size`` | ``int get Size`` <br/> Liefert die Anzahl der Karten in der Kartenmenge zurück.|
 | *getter* ``IsEmpty`` | ``bool get IsEmpty`` <br/> Mit ``IsEmpty`` lässt sich feststellen, ob die Kartenmenge leer ist oder nicht.|
@@ -161,7 +162,6 @@ Tabelle 3. Zentrale Elemente der Klasse ``CardSet``.
 
 ```dart
 static void testCardSet() {
-  // test frame for a single CardSet object
   Card card1 = new Card(CardColor.Kreuz, CardPicture.Neun);
   Card card2 = new Card(CardColor.Pik, CardPicture.Koenig);
   Card card3 = new Card(CardColor.Herz, CardPicture.Sieben);
@@ -193,10 +193,10 @@ Karten auf der Hand: Kreuz Neun, Herz Sieben
 
 ## Klasse ``Player``
 
-Jeder Spieler von Mau-Mau **hat** einen Namen und **kennt** zwei Kartenstapel: Einen Stapel zum Ablegen der Karten und einen zweiten Stapel zum Ziehen von Karten – also zwei ``CardDeck``-Objekte. Ein Spieler hält eine bestimmte Menge von Karten in der Hand, er **hat** also ein ``CardSet``-Objekt. Die Methoden des Spielers, die in Tabelle 4 spezifiziert sind, sind auf die Logik des Mau-Mau-Spiels abgestimmt. Mit der Methode ``chooseAColor`` wird beispielsweise ein bestimmter Spieler gefragt, welche Farbe als nächstes für die abzulegenden Karten zu Grunde zu legen ist (wenn zuvor ein Bube abgelegt wurde).
+Jeder Spieler von Mau-Mau *hat* einen Namen und *kennt* zwei Kartenstapel: Einen Stapel zum Ablegen der Karten und einen zweiten Stapel zum Ziehen von Karten – also zwei ``CardDeck``-Objekte. Ein Spieler hält eine bestimmte Menge von Karten in der Hand, er *hat* also ein ``CardSet``-Objekt. Die Methoden des Spielers, die in Tabelle 4 spezifiziert werden, sind auf die Logik des Mau-Mau-Spiels abgestimmt. Mit der Methode ``chooseAColor`` wird beispielsweise ein bestimmter Spieler gefragt, welche Farbe als nächstes für die abzulegenden Karten zu Grunde zu legen ist (wenn zuvor ein Bube abgelegt wurde).
 
 | Element | Schnittstelle und Beschreibung |
-|:-------------- |-----------------------------------------|
+|:-|:-|
 | Konstruktor | ``Player(String name, CardDeck playing, CardDeck drawing);``<br/> Legt ein ``Player``-Objekt mit dem Namen des Spielers an. Zusätzlich werden Referenzen zweier ``CardDeck``-Objekte übergeben: Ein Kartenstapel zum Ablegen von Karten (Parameter ``playing``) und einer zum Ziehen (Parameter ``drawing``). |
 | *getter* ``Name`` | ``String get Name`` <br/> Dient zum Lesen des Spielernamens. |
 | *getter* ``NumberCards`` | ``int get NumberCards`` <br/> Liefert die Anzahl der Karten zurück, die ein Spieler in der Hand hält. |
@@ -214,96 +214,75 @@ Tabelle 4. Zentrale Elemente der Klasse ``Player``.
 
 ## Klasse ``MauMaster``
 
-Ein ``MauMaster``-Objekt besitzt zwei Kartenstapel zum Ablegen und Ziehen und verwaltet mehrere Spieler. Das Kernstück der Klasse ``MauMaster`` ist die Methode ``Play`` (Tabelle 5). Sie simuliert den kompletten Ablauf eines Mau-Mau-Spiels. Im einfachsten Fall wird die jeweils aufliegende Karte betrachtet und ihre Information an den aktuellen Spieler mit PlayCard weitergereicht. Kann ein Spieler keine Karte ablegen, wird er mit DrawCards zum Ziehen einer entsprechenden Anzahl von Karten aufgefordert. Die Spezialkarten Sieben, Acht und Bube sind von der Play-Methode ebenfalls zu behandeln.
+Ein ``MauMaster``-Objekt besitzt zwei Kartenstapel zum Ablegen und Ziehen und verwaltet mehrere Spieler. Das Kernstück der Klasse ``MauMaster`` ist die Methode ``playGame`` (Tabelle 5). Sie simuliert den kompletten Ablauf eines Mau-Mau-Spiels. Im einfachsten Fall wird die jeweils aufliegende Karte betrachtet und ihre Information an den aktuellen Spieler mit PlayCard weitergereicht. Kann ein Spieler keine Karte ablegen, wird er mit DrawCards zum Ziehen einer entsprechenden Anzahl von Karten aufgefordert. Die Spezialkarten Sieben, Acht und Bube sind von der Play-Methode ebenfalls zu behandeln.
 
 
 | Element | Schnittstelle und Beschreibung |
-|:- |-|
-| Konstruktor | ``MauMaster(List<String> names);``<br/> Legt ein ``MauMaster``-Objekt mit den Namen der Spieler (Parameter ``names``) an.|
-| Methode ``playGame``| ``void playGame();`` <br/> Führt den kompletten Ablauf eines Mau-Mau-Spiels durch. *Tipp*: Implementieren Sie die Methode ``playGame`` zunächst ohne Betrachtung der Sonderregeln für die drei Karten **Sieben**, **Acht** und **Bube**. Ergänzen Sie dann eine Sonderregel nach der anderen.|
+|:-|:-|
+| Konstruktor | ``MauMaster(List<String> names);``<br/> Legt ein ``MauMaster``-Objekt an. Die Namen der Spieler werden im Parameter ``names`` übergeben. Ferner verwaltet dieses Objekt alle (Unter-)Objekte, die zum Ablauf des Spiels erforderlich sind.|
+| Methode ``playGame``| ``void playGame();`` <br/> Führt den kompletten Ablauf eines Mau-Mau-Spiels durch. *Tipp*: Implementieren Sie die Methode zunächst ohne Betrachtung der Sonderregeln für die drei Karten **Sieben**, **Acht** und **Bube**. Ergänzen Sie dann eine Sonderregel nach der anderen.|
 | *getter* ``Rounds`` | ``int get Rounds`` <br/> Liefert die Anzahl der Runden des letzten Spiels zurück. |
 
 Tabelle 4. Zentrale Elemente der Klasse ``MauMaster``.
 
-## Entwurf des Spielautomaten
+## Die Spielidee als Pseudocode
 
-Die Entwicklung des Spielverlaufs kann aufgrund der vielen Ausnahmen (welcher Spieler ist als Nächtes an der Reihe; wieviele Karten sind zu ziehen, etc.) durchaus unübersichtlich werden. Aus diesem Grunde verfolge ich in der Entwicklung die Konzeption eines endlichen Automaten, der den Spielablauf durchführt.
+Die Entwicklung des Spielverlaufs kann aufgrund der vielen Ausnahmen (welcher Spieler ist als Nächtes an der Reihe; wieviele Karten sind zu ziehen; welche Spieler sind noch mit von der Partie, etc.) durchaus unübersichtlich werden. Im Folgenden skizzieren wir einige Codefragmente (in Pseudocode-Notation), die die Realisierung der Klasse ``MauMaster`` veranschaulichen sollen.
 
+Der zentrale Spielablauf könnte in einer while-Kontrollstruktur eingebettet werden:
 
-while (game.isActive) 
+```
+MauMaster game;
+while (game.isActive)
 {
-    game.nextTurn();
-	game.nextPlayer();
+  game._nextTurn();
+  game._nextPlayer();
 }
+```
 
-// Data:
+Die Methode ``_nextTurn`` behandelt die Aktionen des Spielers, der gerade am Zug ist. Mit der ``_nextPlayer``-Methode wird der nächste Spieler ermittelt.
 
-int nextPlayer = 1;
-int siebenCounter = 2;
-int nächsteFarbe;    // TODO: Festlegenm, wann die gesetzt wird
-
-Methoden:
-
--- nextPlayer
--- nextTurn
-
-
--- nextTurn:
-
-// pre-condition: nextPlayer zeigt auf aktuellen Spieler
+Pseudo-Code der Methode ``_nextTurn``:
 
 ```
-if (KarteOnDeck = 7) {
-        if (Spieler hat 7) {
-            = Spieler legt 7 ab;
-            = siebenCounter += 2;
-        }
-        else {
-            = Spieler zieht siebenCounter Karten;
-            = siebenCounter = 2;
-        }
-} else (habeFarbeOderFigur) {
-    = --> Variable choosenColor kann aktiv sein
-    = Lege eine Karte mit Farbe oder Figur ab;
-    = --> Variable choosenColor clearen
+if (karteOnDeck = 7) {
+  if (aktuellerSpieler hat 7) {
+    = aktuellerSpieler legt 7 ab;
+    = siebenCounter += 2;
+  }
+  else {
+    = aktuellerSpieler zieht siebenCounter Karten;
+    = siebenCounter = 2;
+  }
+} else (aktuellerSpieler hat Farbe oder Figur bzgl. karteOnDeck) {
+    = aktuellerSpieler legt Karte mit Farbe oder Figur ab;
+} else if (aktuellerSpieler hat Bube) {
+    = aktuellerSpieler legt Bube ab;
+    = aktuellerSpieler legt nächste Farbe fest;
 } else {
-    // Habe weder Farbe noch Figur
-    if (habeEinenBuben) {
-        = Lege Bube ab
-        = Bestimme nächste Farbe (Color) --> Variable choosenColor gesetzt
-    }
-    else {
-        = Ziehe Karte;
-        = if (habeFarbeOderFigur) {
-            --> Variable choosenColor kann aktiv sein
-            = Gezogene Karte ablegen;
-            = --> Variable choosenColor clearen
-        }
-    }
+    = aktuellerSpieler zieht Karte;
+    = if (gezogeneKarte = Bube) {
+        = Bube ablegen;
+        = aktuellerSpieler legt nächste Farbe fest;
+      } else if (gezogeneKarte stimmt in Farbe oder Figur mit karteOnDeck überein) {
+        = Karte ablegen
+      }
 }
 ```
 
-
--- nextPlayer:
+In dieser Methode sind einige (Instanz-)Variablen zum Einsatz gekommen wie etwa 
 
 ```
-nextPlayer = suche nächsten aktiven Spieler;
+int aktuellerSpieler;   // Beschreibung des aktuellen Spielers 
+int siebenCounter = 2;  // zählt mit, wieviele 7-er Karten abzulegen sind
+Card karteOnDeck;       // oberste Karte des Ziehstabels
+```
+
+Pseudo-Code der Methode ``nextPlayer``:
+
+```
+aktuellerSpieler = nächster noch aktiver Spieler;
 if (KarteOnDeck = 8) {
-    nextPlayer = suche nächsten aktiven Spieler;
+    aktuellerSpieler = nächster noch aktiver Spieler;
 }
 ```
-
-// ==============
-
-Folgende Methoden werden bei diesem Design gebraucht:
-
-Card CardDeck::TopOfDeck
-bool Player::hasSeven // Jepp
-Card Player::playSeven // Jepp
-void Player::drawCards(int number);   // Jepp
-bool Player::hasColorOrPicture(CardColor color, CardPicture picture);   // Jepp
-bool Player::hasBube   // Jepp
-void Player::playBube  // Jepp
-void Player::chooseColor    // Jepp
-Card Player::drawCard   (die Karte vom Rückgabewert sollte mit den nächsten Methode gleich abgelegt werden)  // habe ich schon
-void Player::playCard (Card card);
