@@ -55,7 +55,8 @@ class Player {
     throw Exception('Unexpected error: Player should have a 7!');
   }
 
-  bool playColorOrPicture(CardColor requestedColor, CardPicture requestedPicture) {
+  bool playColorOrPicture(
+      CardColor requestedColor, CardPicture requestedPicture) {
     for (int i = 0; i < _hand.Size; i++) {
       Card card = _hand[i];
 
@@ -103,6 +104,10 @@ class Player {
     String msg = ('>   ${_name} draws ${card} from drawing deck!');
     MauMaster.log(msg);
     return card;
+  }
+
+  void takeCard(Card card) {
+    _hand.add(card);
   }
 
   CardColor chooseAColor() {

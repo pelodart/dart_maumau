@@ -1,35 +1,24 @@
 // TODO: ZWei neue Methode DURCHZIEHEN
 
-// TODO: Viele der 
-
+// TODO: Viele der
 
 // Vererbung: Die beiden Stapen können durch Vererbung besser modelliert werden.
 // Zwei neue Klassen: PlayingDeck und DrawingDeck
 
 // TODO : List<> operationen können mit sehr knappen Methoden ausgeführt werden !!!
 
-// hasSeven und hasBube lassen sich zusammenfassen !!!
+// TODO; Methode takeCard beschreiben !!!!
 
-// playSeven und playBube lassen sich zusammenfassen !!!
-
-// while (game.isActive)
-// {
-// 	game.nextPlayer();
-// 	game.doZug();
-// 	game.print();
-// }
+// TODO: Warum nutzt RANDOM(1)nichts ====
 
 import '../lib/maumau_test.dart';
 
 void main() {
-  // MauMauTest.testUnit_01_Cards();
-  // MauMauTest.testUnit_02_CardDeck();
-  // MauMauTest.testUnit_03_CardDeck();
-  // MauMauTest.testUnit_04_CardSet();
-
-  // MauMauTest.testUnit_05_PlayTheGame();
-
-  // MauMauTest.testUnit_10_EnvironmentVariables();
-
-  MauMauTest.testUnit_12_StressTestMauMaster();
+  // MauMauTest.test_01_Cards();
+  // MauMauTest.test_02_CardDeck();
+  // MauMauTest.test_03_CardDeck();
+  // MauMauTest.test_04_CardSet();
+  MauMauTest.test_05_PlayTheGame();
+  // MauMauTest.test_06_StressTestMauMaster();
+  // MauMauTest.test_09_EnvironmentVariables();
 }

@@ -9,7 +9,7 @@ import 'card_set.dart';
 import 'mau_master.dart';
 
 class MauMauTest {
-  static void testUnit_01_Cards() {
+  static void test_01_Cards() {
     // test frame for Card objects
     Card card1 = Card(CardColor.Kreuz, CardPicture.Neun);
     Card card2 = Card(CardColor.Pik, CardPicture.Koenig);
@@ -29,7 +29,7 @@ class MauMauTest {
     print(card1 == card3);
   }
 
-  static void testUnit_02_CardDeck() {
+  static void test_02_CardDeck() {
     Random rand = Random(1);
 
     // test frame for a single CardDeck object
@@ -45,7 +45,7 @@ class MauMauTest {
     print(deck);
   }
 
-  static void testUnit_03_CardDeck() {
+  static void test_03_CardDeck() {
     Random rand = Random(1);
 
     // test frame for a single CardDeck object
@@ -56,7 +56,7 @@ class MauMauTest {
     print(deck);
   }
 
-  static void testUnit_04_CardSet() {
+  static void test_04_CardSet() {
     // test frame for a single CardSet object
     Card card1 = new Card(CardColor.Kreuz, CardPicture.Neun);
     Card card2 = new Card(CardColor.Pik, CardPicture.Koenig);
@@ -76,7 +76,7 @@ class MauMauTest {
     print("Karten auf der Hand: ${set}");
   }
 
-  static void testUnit_05_PlayTheGame() {
+  static void test_05_PlayTheGame() {
     List<String> names = ["Hans", "Sepp", "Ulli"];
     MauMaster master = new MauMaster(names);
     master.printVersion();
@@ -84,7 +84,7 @@ class MauMauTest {
     master.playGame();
   }
 
-  static void testUnit_12_StressTestMauMaster() {
+  static void test_06_StressTestMauMaster() {
     MauMaster mm = new MauMaster(["Hans", "Sepp", "Ulli"]);
     mm.printVersion();
 
@@ -114,7 +114,7 @@ class MauMauTest {
     print("Maximum number of rounds: ${maxRounds} [Index ${maxRoundsIndex}]");
   }
 
-  static void testUnit_11_EnvironmentVariables() {
+  static void test_09_EnvironmentVariables() {
     Map<String, String> env = Platform.environment;
     String value = env["DEBUG"];
     bool flag = (value == 'true') ? true : false;

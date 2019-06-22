@@ -79,15 +79,20 @@ class MauMaster {
 
   // public interface
   void printVersion() {
-    print("-------------------------------------------------------------");
+    print(_SeparatorLine);
     print(MauMaster.Version);
-    print("-------------------------------------------------------------");
+    print(_SeparatorLine);
   }
 
   void playGame() {
     // uncover first card
     Card firstCard = _drawing.pop();
     _playing.push(firstCard);
+
+    // skip first player, if '8' has been drawn
+    if (_playing.TopOfDeck.Picture == CardPicture.Acht) {
+      _currentPlayer++;
+    }
 
     while (_activePlayers > 1) {
       // trace game
@@ -119,32 +124,35 @@ class MauMaster {
         _isSevenActive = false;
       }
     } else {
-      _isSevenActive = true;
-      CardColor currentColor = _playing.TopOfDeck.Color;
-      if (_choosenColor != CardColor.Empty) currentColor = _choosenColor;
-      CardPicture currentPicture = _playing.TopOfDeck.Picture;
+      // _isSevenActive = true;  // TODO: FALSCH .,. darf erst wieder SCHARF werden, wenn eine Karte abgelehgt wurde !!!!
+      CardColor requestedColor = _playing.TopOfDeck.Color;
+      if (_choosenColor != CardColor.Empty) requestedColor = _choosenColor;
+      CardPicture requestedPicture = _playing.TopOfDeck.Picture;
 
-      if (player.playColorOrPicture(currentColor, currentPicture)) {
+      if (player.playColorOrPicture(requestedColor, requestedPicture)) {
         // player has played a card
         _choosenColor = CardColor.Empty;
+        _isSevenActive = true;
       } else if (player.hasPicture(CardPicture.Bube)) {
         // player cannot play a card, but has a 'Bube', we play it immediately
         player.playPicture(CardPicture.Bube);
         _choosenColor = player.chooseAColor();
+        _isSevenActive = true;
       } else {
         // player has neither requested color nor requested picture: draw a card
         Card card = player.drawCard();
+        player.takeCard(card);
 
         // check, whether drawn card can be played immediately
-        if (card.Picture == CardPicture.Bube) {
-          // player has drawn a Bube card, we play this card immediately
-          player.playCard(card);
-          _choosenColor = player.chooseAColor();
-        } else if (card.Color == _playing.TopOfDeck.Color ||
-            card.Picture == _playing.TopOfDeck.Picture) {
-          // player can play drawn card immediately
-          player.playCard(card);
+        if (player.playColorOrPicture(requestedColor, requestedPicture)) {
+          // player could play drawn card
           _choosenColor = CardColor.Empty;
+          _isSevenActive = true;
+        } else if (player.hasPicture(CardPicture.Bube)) {
+          // last card must have been a 'Bube', play 'Bube' immediately
+          player.playPicture(CardPicture.Bube);
+          _choosenColor = player.chooseAColor();
+          _isSevenActive = true;
         }
       }
     }
@@ -163,6 +171,7 @@ class MauMaster {
     _nextPlayerInternal();
     Card top = _playing.TopOfDeck;
     if (top.Picture == CardPicture.Acht) {
+      print(_SeparatorLine);
       log("'8' is on top of deck - skip next player");
       _nextPlayerInternal();
     }
@@ -192,20 +201,23 @@ class MauMaster {
 
   void _logGameStatusDebug(Card topMostCard, int currentPlayer) {
     if (_isVerbose) {
-      print("-------------------------------------------------------------");
+      print(_SeparatorLine);
       print("Topmost card: ${topMostCard}");
-      print("-------------------------------------------------------------");
+      print(_SeparatorLine);
 
       for (int i = 0; i < _players.length; i++) {
         String prefix = (i == currentPlayer) ? "-->" : "   ";
         print("${prefix} ${_players[i].toString()}");
       }
 
-      print("-------------------------------------------------------------");
+      print(_SeparatorLine);
     }
 
 // #if SINGLE_STEP
 //         Console.ReadKey();  // just for testing
 // #endif
   }
+
+  static const String _SeparatorLine =
+      "-------------------------------------------------------------";
 }
