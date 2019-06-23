@@ -208,6 +208,7 @@ Jeder Spieler von Mau-Mau *hat* einen Namen und *kennt* zwei Kartenstapel: Einen
 | Methode ``playColorOrPicture``| ``bool playColorOrPicture(CardColor requestedColor, CardPicture requestedPicture);`` <br/> Mit ``playColorOrPicture`` wird ein Spieler aufgefordert, eine Karte abzulegen. Die beiden Parameter ``requestedColor`` und ``requestedPicture`` spezifizieren die oberste Karte des Kartenstapels zum Ablegen. Die abzulegende Karte muss also entweder diese Farbe oder dieses Bild haben. Kann der Spieler keine Karte ablegen, verlässt er die Methode mit dem Rückgabewert ``false``, andernfalls mit ``true``. |
 | Methode ``drawCards``| ``void drawCards(int number);`` <br/> Mit dem Aufruf dieser Methode zieht der Spieler die Anzahl von ``number`` Karten. Vorzugsweise muss ein Spieler diese Methode aufrufen, wenn sein Vorgänger im Spiel eine '7' abgelegt hat. |
 | Methode ``drawCard``| ``Card drawCard();`` <br/> Mit dem Aufruf dieser Methode zieht der Spieler eine Karte.  |
+| Methode ``takeCard``| ``void takeCard(Card card);`` <br/> Mit dem Aufruf dieser Methode nimmt der Spieler Karte ``card`` bei sich auf.|
 | Methode ``chooseAColor``| ``CardColor chooseAColor();`` <br/>  Legt der Spieler eine Bube-Karte ab, darf er sich eine Farbe wünschen, die für den nächsten Spieler gilt. Es empfiehlt sich, eine Farbe zu wählen, von der der aktuelle Spieler ein oder mehrere Karten besitzt. |
 
 Tabelle 4. Zentrale Elemente der Klasse ``Player``.
@@ -259,11 +260,11 @@ if (karteOnDeck = 7) {
     = aktuellerSpieler legt nächste Farbe fest;
 } else {
     = aktuellerSpieler zieht Karte;
-    = if (gezogeneKarte = Bube) {
+    = if (gezogeneKarte kann abgelegt werden) {
+        = Karte ablegen;
+      } else if (gezogeneKarte = Bube) {
         = Bube ablegen;
         = aktuellerSpieler legt nächste Farbe fest;
-      } else if (gezogeneKarte stimmt in Farbe oder Figur mit karteOnDeck überein) {
-        = Karte ablegen
       }
 }
 ```
@@ -293,393 +294,172 @@ Das folgende Beispiel demonstriert, wie der Ablauf Ihres Programms aussehen kön
 -------------------------------------------------------------
 Simple Mau-Mau Cards Game (Version 1.00)
 -------------------------------------------------------------
->   Hans draws Herz Dame from drawing deck!
->   Hans draws Herz Koenig from drawing deck!
->   Hans draws Karo Dame from drawing deck!
+>   Hans draws Pik Neun from drawing deck!
+>   Hans draws Pik Bube from drawing deck!
+>   Hans draws Kreuz Sieben from drawing deck!
 >   Hans draws Herz Ass from drawing deck!
 >   Hans draws Kreuz Zehn from drawing deck!
->   Sepp draws Pik Sieben from drawing deck!
+>   Sepp draws Kreuz Neun from drawing deck!
 >   Sepp draws Kreuz Dame from drawing deck!
->   Sepp draws Pik Zehn from drawing deck!
->   Sepp draws Karo Acht from drawing deck!
->   Sepp draws Pik Acht from drawing deck!
->   Ulli draws Kreuz Sieben from drawing deck!
->   Ulli draws Herz Sieben from drawing deck!
->   Ulli draws Herz Bube from drawing deck!
->   Ulli draws Herz Zehn from drawing deck!
->   Ulli draws Pik Bube from drawing deck!
--------------------------------------------------------------
-Topmost card: Kreuz Acht
--------------------------------------------------------------
---> Hans [X]: Herz Dame, Herz Koenig, Karo Dame, Herz Ass, Kreuz Zehn
-    Sepp [X]: Pik Sieben, Kreuz Dame, Pik Zehn, Karo Acht, Pik Acht
-    Ulli [X]: Kreuz Sieben, Herz Sieben, Herz Bube, Herz Zehn, Pik Bube
--------------------------------------------------------------
->   Hans plays Kreuz Zehn
--------------------------------------------------------------
-Topmost card: Kreuz Zehn
--------------------------------------------------------------
-    Hans [X]: Herz Dame, Herz Koenig, Karo Dame, Herz Ass
---> Sepp [X]: Pik Sieben, Kreuz Dame, Pik Zehn, Karo Acht, Pik Acht
-    Ulli [X]: Kreuz Sieben, Herz Sieben, Herz Bube, Herz Zehn, Pik Bube
--------------------------------------------------------------
->   Sepp plays Kreuz Dame
--------------------------------------------------------------
-Topmost card: Kreuz Dame
--------------------------------------------------------------
-    Hans [X]: Herz Dame, Herz Koenig, Karo Dame, Herz Ass
-    Sepp [X]: Pik Sieben, Pik Zehn, Karo Acht, Pik Acht
---> Ulli [X]: Kreuz Sieben, Herz Sieben, Herz Bube, Herz Zehn, Pik Bube
--------------------------------------------------------------
->   Ulli plays Kreuz Sieben
--------------------------------------------------------------
-Topmost card: Kreuz Sieben
--------------------------------------------------------------
---> Hans [X]: Herz Dame, Herz Koenig, Karo Dame, Herz Ass
-    Sepp [X]: Pik Sieben, Pik Zehn, Karo Acht, Pik Acht
-    Ulli [X]: Herz Sieben, Herz Bube, Herz Zehn, Pik Bube
--------------------------------------------------------------
->   Hans draws Karo Zehn from drawing deck!
->   Hans draws Kreuz Bube from drawing deck!
--------------------------------------------------------------
-Topmost card: Kreuz Sieben
--------------------------------------------------------------
-    Hans [X]: Herz Dame, Herz Koenig, Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube
---> Sepp [X]: Pik Sieben, Pik Zehn, Karo Acht, Pik Acht
-    Ulli [X]: Herz Sieben, Herz Bube, Herz Zehn, Pik Bube
--------------------------------------------------------------
->   Sepp plays Pik Sieben
+>   Sepp draws Karo Neun from drawing deck!
+>   Sepp draws Pik Koenig from drawing deck!
+>   Sepp draws Karo Dame from drawing deck!
+>   Ulli draws Kreuz Acht from drawing deck!
+>   Ulli draws Pik Dame from drawing deck!
+>   Ulli draws Pik Acht from drawing deck!
+>   Ulli draws Kreuz Ass from drawing deck!
+>   Ulli draws Karo Zehn from drawing deck!
 -------------------------------------------------------------
 Topmost card: Pik Sieben
 -------------------------------------------------------------
-    Hans [X]: Herz Dame, Herz Koenig, Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube
-    Sepp [X]: Pik Zehn, Karo Acht, Pik Acht
---> Ulli [X]: Herz Sieben, Herz Bube, Herz Zehn, Pik Bube
+--> Hans [X]: Pik Neun, Pik Bube, Kreuz Sieben, Herz Ass, Kreuz Zehn
+    Sepp [X]: Kreuz Neun, Kreuz Dame, Karo Neun, Pik Koenig, Karo Dame
+    Ulli [X]: Kreuz Acht, Pik Dame, Pik Acht, Kreuz Ass, Karo Zehn
 -------------------------------------------------------------
->   Ulli plays Herz Sieben
+>   Hans plays Kreuz Sieben
 -------------------------------------------------------------
-Topmost card: Herz Sieben
+Topmost card: Kreuz Sieben
 -------------------------------------------------------------
---> Hans [X]: Herz Dame, Herz Koenig, Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube
-    Sepp [X]: Pik Zehn, Karo Acht, Pik Acht
-    Ulli [X]: Herz Bube, Herz Zehn, Pik Bube
+    Hans [X]: Pik Neun, Pik Bube, Herz Ass, Kreuz Zehn
+--> Sepp [X]: Kreuz Neun, Kreuz Dame, Karo Neun, Pik Koenig, Karo Dame
+    Ulli [X]: Kreuz Acht, Pik Dame, Pik Acht, Kreuz Ass, Karo Zehn
 -------------------------------------------------------------
->   Hans draws Kreuz Koenig from drawing deck!
->   Hans draws Pik Koenig from drawing deck!
->   Hans draws Pik Dame from drawing deck!
->   Hans draws Herz Acht from drawing deck!
+>   Sepp draws Karo Acht from drawing deck!
+>   Sepp draws Kreuz Bube from drawing deck!
+>   Sepp draws Herz Dame from drawing deck!
+>   Sepp draws Kreuz Koenig from drawing deck!
 -------------------------------------------------------------
-Topmost card: Herz Sieben
+Topmost card: Kreuz Sieben
 -------------------------------------------------------------
-    Hans [X]: Herz Dame, Herz Koenig, Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Koenig, Pik Dame, Herz Acht
---> Sepp [X]: Pik Zehn, Karo Acht, Pik Acht
-    Ulli [X]: Herz Bube, Herz Zehn, Pik Bube
+    Hans [X]: Pik Neun, Pik Bube, Herz Ass, Kreuz Zehn
+    Sepp [X]: Kreuz Neun, Kreuz Dame, Karo Neun, Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Herz Dame, Kreuz Koenig
+--> Ulli [X]: Kreuz Acht, Pik Dame, Pik Acht, Kreuz Ass, Karo Zehn
 -------------------------------------------------------------
->   Sepp draws Kreuz Ass from drawing deck!
+>   Ulli plays Kreuz Acht
 -------------------------------------------------------------
-Topmost card: Herz Sieben
+'8' is on top of deck - skip next player
 -------------------------------------------------------------
-    Hans [X]: Herz Dame, Herz Koenig, Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Pik Zehn, Karo Acht, Pik Acht, Kreuz Ass
---> Ulli [X]: Herz Bube, Herz Zehn, Pik Bube
+Topmost card: Kreuz Acht
 -------------------------------------------------------------
->   Ulli draws Karo Bube from drawing deck!
->   Ulli draws Pik Ass from drawing deck!
+    Hans [X]: Pik Neun, Pik Bube, Herz Ass, Kreuz Zehn
+--> Sepp [X]: Kreuz Neun, Kreuz Dame, Karo Neun, Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Herz Dame, Kreuz Koenig
+    Ulli [X]: Pik Dame, Pik Acht, Kreuz Ass, Karo Zehn
 -------------------------------------------------------------
-Topmost card: Herz Sieben
+>   Sepp plays Kreuz Neun
 -------------------------------------------------------------
---> Hans [X]: Herz Dame, Herz Koenig, Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Pik Zehn, Karo Acht, Pik Acht, Kreuz Ass
-    Ulli [X]: Herz Bube, Herz Zehn, Pik Bube, Karo Bube, Pik Ass
+Topmost card: Kreuz Neun
 -------------------------------------------------------------
->   Hans plays Herz Dame
+    Hans [X]: Pik Neun, Pik Bube, Herz Ass, Kreuz Zehn
+    Sepp [X]: Kreuz Dame, Karo Neun, Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Herz Dame, Kreuz Koenig
+--> Ulli [X]: Pik Dame, Pik Acht, Kreuz Ass, Karo Zehn
 -------------------------------------------------------------
-Topmost card: Herz Dame
+>   Ulli plays Kreuz Ass
 -------------------------------------------------------------
-    Hans [X]: Herz Koenig, Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Koenig, Pik Dame, Herz Acht
---> Sepp [X]: Pik Zehn, Karo Acht, Pik Acht, Kreuz Ass
-    Ulli [X]: Herz Bube, Herz Zehn, Pik Bube, Karo Bube, Pik Ass
+Topmost card: Kreuz Ass
 -------------------------------------------------------------
->   Sepp draws Karo Koenig from drawing deck!
--------------------------------------------------------------
-Topmost card: Herz Dame
--------------------------------------------------------------
-    Hans [X]: Herz Koenig, Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Pik Zehn, Karo Acht, Pik Acht, Kreuz Ass, Karo Koenig
---> Ulli [X]: Herz Bube, Herz Zehn, Pik Bube, Karo Bube, Pik Ass
--------------------------------------------------------------
->   Ulli plays Herz Zehn
--------------------------------------------------------------
-Topmost card: Herz Zehn
--------------------------------------------------------------
---> Hans [X]: Herz Koenig, Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Pik Zehn, Karo Acht, Pik Acht, Kreuz Ass, Karo Koenig
-    Ulli [X]: Herz Bube, Pik Bube, Karo Bube, Pik Ass
--------------------------------------------------------------
->   Hans plays Herz Koenig
--------------------------------------------------------------
-Topmost card: Herz Koenig
--------------------------------------------------------------
-    Hans [X]: Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Koenig, Pik Dame, Herz Acht
---> Sepp [X]: Pik Zehn, Karo Acht, Pik Acht, Kreuz Ass, Karo Koenig
-    Ulli [X]: Herz Bube, Pik Bube, Karo Bube, Pik Ass
--------------------------------------------------------------
->   Sepp plays Karo Koenig
--------------------------------------------------------------
-Topmost card: Karo Koenig
--------------------------------------------------------------
-    Hans [X]: Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Pik Zehn, Karo Acht, Pik Acht, Kreuz Ass
---> Ulli [X]: Herz Bube, Pik Bube, Karo Bube, Pik Ass
--------------------------------------------------------------
->   Ulli plays Herz Bube
->   Ulli has choosen color Pik
--------------------------------------------------------------
-Topmost card: Herz Bube
--------------------------------------------------------------
---> Hans [X]: Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Pik Zehn, Karo Acht, Pik Acht, Kreuz Ass
-    Ulli [X]: Pik Bube, Karo Bube, Pik Ass
--------------------------------------------------------------
->   Hans plays Pik Koenig
--------------------------------------------------------------
-Topmost card: Pik Koenig
--------------------------------------------------------------
-    Hans [X]: Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Dame, Herz Acht
---> Sepp [X]: Pik Zehn, Karo Acht, Pik Acht, Kreuz Ass
-    Ulli [X]: Pik Bube, Karo Bube, Pik Ass
--------------------------------------------------------------
->   Sepp plays Pik Zehn
--------------------------------------------------------------
-Topmost card: Pik Zehn
--------------------------------------------------------------
-    Hans [X]: Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Karo Acht, Pik Acht, Kreuz Ass
---> Ulli [X]: Pik Bube, Karo Bube, Pik Ass
--------------------------------------------------------------
->   Ulli plays Pik Ass
--------------------------------------------------------------
-Topmost card: Pik Ass
--------------------------------------------------------------
---> Hans [X]: Karo Dame, Herz Ass, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Karo Acht, Pik Acht, Kreuz Ass
-    Ulli [X]: Pik Bube, Karo Bube
+--> Hans [X]: Pik Neun, Pik Bube, Herz Ass, Kreuz Zehn
+    Sepp [X]: Kreuz Dame, Karo Neun, Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Herz Dame, Kreuz Koenig
+    Ulli [X]: Pik Dame, Pik Acht, Karo Zehn
 -------------------------------------------------------------
 >   Hans plays Herz Ass
 -------------------------------------------------------------
 Topmost card: Herz Ass
 -------------------------------------------------------------
-    Hans [X]: Karo Dame, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Dame, Herz Acht
---> Sepp [X]: Karo Acht, Pik Acht, Kreuz Ass
-    Ulli [X]: Pik Bube, Karo Bube
+    Hans [X]: Pik Neun, Pik Bube, Kreuz Zehn
+--> Sepp [X]: Kreuz Dame, Karo Neun, Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Herz Dame, Kreuz Koenig
+    Ulli [X]: Pik Dame, Pik Acht, Karo Zehn
 -------------------------------------------------------------
->   Sepp plays Kreuz Ass
+>   Sepp plays Herz Dame
 -------------------------------------------------------------
-Topmost card: Kreuz Ass
+Topmost card: Herz Dame
 -------------------------------------------------------------
-    Hans [X]: Karo Dame, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Karo Acht, Pik Acht
---> Ulli [X]: Pik Bube, Karo Bube
+    Hans [X]: Pik Neun, Pik Bube, Kreuz Zehn
+    Sepp [X]: Kreuz Dame, Karo Neun, Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Kreuz Koenig
+--> Ulli [X]: Pik Dame, Pik Acht, Karo Zehn
 -------------------------------------------------------------
->   Ulli plays Pik Bube
-==> Ulli says 'Mau'
->   Ulli has choosen color Karo
+>   Ulli plays Pik Dame
 -------------------------------------------------------------
-Topmost card: Pik Bube
+Topmost card: Pik Dame
 -------------------------------------------------------------
---> Hans [X]: Karo Dame, Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Karo Acht, Pik Acht
-    Ulli [X]: Karo Bube
+--> Hans [X]: Pik Neun, Pik Bube, Kreuz Zehn
+    Sepp [X]: Kreuz Dame, Karo Neun, Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Kreuz Koenig
+    Ulli [X]: Pik Acht, Karo Zehn
 -------------------------------------------------------------
->   Hans plays Karo Dame
--------------------------------------------------------------
-Topmost card: Karo Dame
--------------------------------------------------------------
-    Hans [X]: Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Dame, Herz Acht
---> Sepp [X]: Karo Acht, Pik Acht
-    Ulli [X]: Karo Bube
--------------------------------------------------------------
->   Sepp plays Karo Acht
-==> Sepp says 'Mau'
--------------------------------------------------------------
-'8' is on top of deck - skip next player
--------------------------------------------------------------
-Topmost card: Karo Acht
--------------------------------------------------------------
---> Hans [X]: Karo Zehn, Kreuz Bube, Kreuz Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Pik Acht
-    Ulli [X]: Karo Bube
--------------------------------------------------------------
->   Hans plays Karo Zehn
--------------------------------------------------------------
-Topmost card: Karo Zehn
--------------------------------------------------------------
-    Hans [X]: Kreuz Bube, Kreuz Koenig, Pik Dame, Herz Acht
---> Sepp [X]: Pik Acht
-    Ulli [X]: Karo Bube
--------------------------------------------------------------
->   Sepp draws Herz Neun from drawing deck!
--------------------------------------------------------------
-Topmost card: Karo Zehn
--------------------------------------------------------------
-    Hans [X]: Kreuz Bube, Kreuz Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Pik Acht, Herz Neun
---> Ulli [X]: Karo Bube
--------------------------------------------------------------
->   Ulli plays Karo Bube
->   Ulli says 'Mau-Mau', leaving game !
->   Ulli has choosen color Herz
--------------------------------------------------------------
-Topmost card: Karo Bube
--------------------------------------------------------------
---> Hans [X]: Kreuz Bube, Kreuz Koenig, Pik Dame, Herz Acht
-    Sepp [X]: Pik Acht, Herz Neun
-    Ulli [-]
--------------------------------------------------------------
->   Hans plays Herz Acht
--------------------------------------------------------------
-'8' is on top of deck - skip next player
--------------------------------------------------------------
-Topmost card: Herz Acht
--------------------------------------------------------------
---> Hans [X]: Kreuz Bube, Kreuz Koenig, Pik Dame
-    Sepp [X]: Pik Acht, Herz Neun
-    Ulli [-]
--------------------------------------------------------------
->   Hans plays Kreuz Bube
->   Hans has choosen color Kreuz
--------------------------------------------------------------
-Topmost card: Kreuz Bube
--------------------------------------------------------------
-    Hans [X]: Kreuz Koenig, Pik Dame
---> Sepp [X]: Pik Acht, Herz Neun
-    Ulli [-]
--------------------------------------------------------------
->   Sepp draws Karo Ass from drawing deck!
--------------------------------------------------------------
-Topmost card: Kreuz Bube
--------------------------------------------------------------
---> Hans [X]: Kreuz Koenig, Pik Dame
-    Sepp [X]: Pik Acht, Herz Neun, Karo Ass
-    Ulli [-]
--------------------------------------------------------------
->   Hans plays Kreuz Koenig
-==> Hans says 'Mau'
--------------------------------------------------------------
-Topmost card: Kreuz Koenig
--------------------------------------------------------------
-    Hans [X]: Pik Dame
---> Sepp [X]: Pik Acht, Herz Neun, Karo Ass
-    Ulli [-]
--------------------------------------------------------------
->   Sepp draws Kreuz Neun from drawing deck!
->   Sepp plays Kreuz Neun
--------------------------------------------------------------
-Topmost card: Kreuz Neun
--------------------------------------------------------------
---> Hans [X]: Pik Dame
-    Sepp [X]: Pik Acht, Herz Neun, Karo Ass
-    Ulli [-]
--------------------------------------------------------------
->   Hans draws Karo Neun from drawing deck!
->   Hans plays Karo Neun
-==> Hans says 'Mau'
--------------------------------------------------------------
-Topmost card: Karo Neun
--------------------------------------------------------------
-    Hans [X]: Pik Dame
---> Sepp [X]: Pik Acht, Herz Neun, Karo Ass
-    Ulli [-]
--------------------------------------------------------------
->   Sepp plays Herz Neun
--------------------------------------------------------------
-Topmost card: Herz Neun
--------------------------------------------------------------
---> Hans [X]: Pik Dame
-    Sepp [X]: Pik Acht, Karo Ass
-    Ulli [-]
--------------------------------------------------------------
->   Hans draws Pik Neun from drawing deck!
 >   Hans plays Pik Neun
-==> Hans says 'Mau'
 -------------------------------------------------------------
 Topmost card: Pik Neun
 -------------------------------------------------------------
-    Hans [X]: Pik Dame
---> Sepp [X]: Pik Acht, Karo Ass
-    Ulli [-]
+    Hans [X]: Pik Bube, Kreuz Zehn
+--> Sepp [X]: Kreuz Dame, Karo Neun, Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Kreuz Koenig
+    Ulli [X]: Pik Acht, Karo Zehn
 -------------------------------------------------------------
->   Sepp plays Pik Acht
-==> Sepp says 'Mau'
+>   Sepp plays Karo Neun
 -------------------------------------------------------------
-'8' is on top of deck - skip next player
+Topmost card: Karo Neun
 -------------------------------------------------------------
-Topmost card: Pik Acht
+    Hans [X]: Pik Bube, Kreuz Zehn
+    Sepp [X]: Kreuz Dame, Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Kreuz Koenig
+--> Ulli [X]: Pik Acht, Karo Zehn
 -------------------------------------------------------------
-    Hans [X]: Pik Dame
---> Sepp [X]: Karo Ass
-    Ulli [-]
+>   Ulli plays Karo Zehn
+==> Ulli says 'Mau'
 -------------------------------------------------------------
->   Sepp draws Karo Sieben from drawing deck!
+Topmost card: Karo Zehn
 -------------------------------------------------------------
-'8' is on top of deck - skip next player
+--> Hans [X]: Pik Bube, Kreuz Zehn
+    Sepp [X]: Kreuz Dame, Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Kreuz Koenig
+    Ulli [X]: Pik Acht
 -------------------------------------------------------------
-Topmost card: Pik Acht
--------------------------------------------------------------
-    Hans [X]: Pik Dame
---> Sepp [X]: Karo Ass, Karo Sieben
-    Ulli [-]
--------------------------------------------------------------
->   turn over playing deck to serve as new drawing deck
->   Sepp draws Kreuz Sieben from drawing deck!
--------------------------------------------------------------
-'8' is on top of deck - skip next player
--------------------------------------------------------------
-Topmost card: Pik Acht
--------------------------------------------------------------
-    Hans [X]: Pik Dame
---> Sepp [X]: Karo Ass, Karo Sieben, Kreuz Sieben
-    Ulli [-]
--------------------------------------------------------------
->   Sepp draws Karo Acht from drawing deck!
->   Sepp plays Karo Acht
--------------------------------------------------------------
-'8' is on top of deck - skip next player
--------------------------------------------------------------
-Topmost card: Karo Acht
--------------------------------------------------------------
-    Hans [X]: Pik Dame
---> Sepp [X]: Karo Ass, Karo Sieben, Kreuz Sieben
-    Ulli [-]
--------------------------------------------------------------
->   Sepp plays Karo Ass
--------------------------------------------------------------
-Topmost card: Karo Ass
--------------------------------------------------------------
---> Hans [X]: Pik Dame
-    Sepp [X]: Karo Sieben, Kreuz Sieben
-    Ulli [-]
--------------------------------------------------------------
->   Hans draws Kreuz Bube from drawing deck!
->   Hans plays Kreuz Bube
+>   Hans plays Kreuz Zehn
 ==> Hans says 'Mau'
->   Hans has choosen color Pik
 -------------------------------------------------------------
-Topmost card: Kreuz Bube
+Topmost card: Kreuz Zehn
 -------------------------------------------------------------
-    Hans [X]: Pik Dame
---> Sepp [X]: Karo Sieben, Kreuz Sieben
-    Ulli [-]
+    Hans [X]: Pik Bube
+--> Sepp [X]: Kreuz Dame, Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Kreuz Koenig
+    Ulli [X]: Pik Acht
 -------------------------------------------------------------
->   Sepp draws Herz Koenig from drawing deck!
+>   Sepp plays Kreuz Dame
 -------------------------------------------------------------
-Topmost card: Kreuz Bube
+Topmost card: Kreuz Dame
 -------------------------------------------------------------
---> Hans [X]: Pik Dame
-    Sepp [X]: Karo Sieben, Kreuz Sieben, Herz Koenig
-    Ulli [-]
+    Hans [X]: Pik Bube
+    Sepp [X]: Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Kreuz Koenig
+--> Ulli [X]: Pik Acht
 -------------------------------------------------------------
->   Hans plays Pik Dame
+>   Ulli draws Karo Bube from drawing deck!
+>   Ulli plays Karo Bube
+==> Ulli says 'Mau'
+>   Ulli has choosen color Pik
+-------------------------------------------------------------
+Topmost card: Karo Bube
+-------------------------------------------------------------
+--> Hans [X]: Pik Bube
+    Sepp [X]: Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Kreuz Koenig
+    Ulli [X]: Pik Acht
+-------------------------------------------------------------
+>   Hans plays Pik Bube
 >   Hans says 'Mau-Mau', leaving game !
-Sepp has lost --- Game over [42]
+>   Hans has choosen color Herz
+-------------------------------------------------------------
+Topmost card: Pik Bube
+-------------------------------------------------------------
+    Hans [-]
+--> Sepp [X]: Pik Koenig, Karo Dame, Karo Acht, Kreuz Bube, Kreuz Koenig
+    Ulli [X]: Pik Acht
+-------------------------------------------------------------
+>   Sepp plays Kreuz Bube
+>   Sepp has choosen color Pik
+-------------------------------------------------------------
+Topmost card: Kreuz Bube
+-------------------------------------------------------------
+    Hans [-]
+    Sepp [X]: Pik Koenig, Karo Dame, Karo Acht, Kreuz Koenig
+--> Ulli [X]: Pik Acht
+-------------------------------------------------------------
+>   Ulli plays Pik Acht
+>   Ulli says 'Mau-Mau', leaving game !
+-------------------------------------------------------------
+'8' is on top of deck - skip next player
+Sepp has lost --- Game over [17]
 ```
