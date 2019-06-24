@@ -10,9 +10,10 @@ import 'player.dart';
 class MauMaster {
   static const String Version = "Simple Mau-Mau Cards Game (Version 1.00)";
   static const int CardsAtHand = 5; // used for testing - should be 5 normally
+  static const int RandomSeed = 7;
 
-  CardDeck _playing; // deck to play (Kartenstapel zum Ablegen - offen)
-  CardDeck _drawing; // deck to draw (Kartenstapel zum Ziehen - verdeckt)
+  PlayingDeck _playing; // deck to play (Kartenstapel zum Ablegen - offen)
+  DrawingDeck _drawing; // deck to draw (Kartenstapel zum Ziehen - verdeckt)
   List<Player> _players; // array of players
 
   // controlling variables of a single game
@@ -35,21 +36,25 @@ class MauMaster {
     String value = env["DEBUG"];
     _isDebug = (value == 'true') ? true : false;
 
-    // TODO: create new random generator (prefer unique results to make testing more easier)
-    _random = Random();
+    // set (or clear) 'verbose' flag
+    _isVerbose = true;
+
+    // used for testing - to generate identically sequences of random numbers
+    if (_isDebug) {
+      _random = Random(RandomSeed);
+    } else {
+      _random = Random();
+    }
 
     // create two card decks (singletons)
-    _playing = CardDeck(_random); // deck to play
-    _drawing = CardDeck(_random); // deck to draw
+    _playing = PlayingDeck(_random); // deck to play
+    _drawing = DrawingDeck(_random); // deck to draw
 
     // create array of players
     _players = List<Player>(names.length);
     for (int i = 0; i < names.length; i++) {
       _players[i] = Player(names[i], _playing, _drawing);
     }
-
-    // set (or clear) 'verbose' flag
-    _isVerbose = true;
   }
 
   // getter/setter
@@ -124,7 +129,6 @@ class MauMaster {
         _isSevenActive = false;
       }
     } else {
-      // _isSevenActive = true;  // TODO: FALSCH .,. darf erst wieder SCHARF werden, wenn eine Karte abgelehgt wurde !!!!
       CardColor requestedColor = _playing.TopOfDeck.Color;
       if (_choosenColor != CardColor.Empty) requestedColor = _choosenColor;
       CardPicture requestedPicture = _playing.TopOfDeck.Picture;
@@ -212,10 +216,6 @@ class MauMaster {
 
       print(_SeparatorLine);
     }
-
-// #if SINGLE_STEP
-//         Console.ReadKey();  // just for testing
-// #endif
   }
 
   static const String _SeparatorLine =

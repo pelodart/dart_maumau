@@ -29,15 +29,15 @@ class MauMauTest {
     print(card1 == card3);
   }
 
-  static void test_02_CardDeck() {
+  static void test_02_PlayingDeck() {
     Random rand = Random(1);
 
-    // test frame for a single CardDeck object
+    // test frame for a single PlayingDeck object
     Card card1 = Card(CardColor.Kreuz, CardPicture.Neun);
     Card card2 = Card(CardColor.Pik, CardPicture.Koenig);
     Card card3 = Card(CardColor.Herz, CardPicture.Sieben);
 
-    CardDeck deck = CardDeck(rand);
+    PlayingDeck deck = PlayingDeck(rand);
     deck.push(card1);
     deck.push(card2);
     deck.push(card3);
@@ -45,15 +45,21 @@ class MauMauTest {
     print(deck);
   }
 
-  static void test_03_CardDeck() {
+  static void test_03_DrawingDeck() {
     Random rand = Random(1);
 
-    // test frame for a single CardDeck object
-    CardDeck deck = CardDeck(rand);
+    // test frame for a single DrawingDeck object
+    DrawingDeck deck = DrawingDeck(rand);
     deck.fill();
     print(deck);
     deck.shuffle();
     print(deck);
+
+    while (!deck.IsEmpty) {
+      Card card = deck.pop();
+      print ('-> Popped ${card}');
+    }
+    print ('=> Deck is empty');
   }
 
   static void test_04_CardSet() {

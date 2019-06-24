@@ -7,12 +7,12 @@ import 'mau_master.dart';
 
 class Player {
   final CardSet _hand; // player's hand of cards (usually 5)
-  final CardDeck _playing; // deck to play
-  final CardDeck _drawing; // deck to draw
+  final PlayingDeck _playing; // deck to play
+  final DrawingDeck _drawing; // deck to draw
   final String _name; // players name
   bool _isPlaying; // false, after getting rid of all cards
 
-  Player(String name, CardDeck playing, CardDeck drawing)
+  Player(String name, PlayingDeck playing, DrawingDeck drawing)
       : _name = name,
         _playing = playing,
         _drawing = drawing,
