@@ -10,7 +10,7 @@ class Card {
       : _color = color,
         _picture = picture {}
 
-  // getter/setter
+  // getter
   CardColor get Color => _color;
   CardPicture get Picture => _picture;
 

@@ -52,7 +52,8 @@ class Player {
       }
     }
 
-    throw Exception('Unexpected error: Player should have a 7!');
+    throw Exception(
+        'Unexpected error: Player should have reuested picture ${picture}');
   }
 
   bool playColorOrPicture(

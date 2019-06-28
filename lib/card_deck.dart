@@ -12,7 +12,7 @@ class _CardDeck {
     _rand = rand;
   }
 
-  // getter/setter
+  // getter
   int get Size => _deck.length;
   bool get IsEmpty => _deck.length == 0;
 

@@ -6,11 +6,11 @@ class CardSet {
   // c'tor(s)
   CardSet() : _set = List<Card>() {}
 
-  // getter/setter
+  // getter
   int get Size => _set.length;
   bool get IsEmpty => _set.length == 0;
 
-  // operators
+  // index operator
   operator [](int i) => _set[i];
   operator []=(int i, Card value) => _set[i] = value;
 
@@ -36,9 +36,6 @@ class CardSet {
   String toString() {
     String s = '';
     for (int i = 0; i < _set.length; i++) {
-      //   s += "${i + 1}: ${_set[i]}";
-      //   s += '\n';
-
       s += _set[i].toString();
       if (i < _set.length - 1) s += ", ";
     }
