@@ -1,0 +1,9 @@
+name: mau_mau
+version: 1.0.0
+description: >-
+  Dart implementation of one of the most well known card games Mau Mau
+author: PeLo
+dependencies:
+
+environment:
+  sdk: '>=2.0.0 <3.0.0'
